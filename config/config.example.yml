@@ -1,0 +1,17 @@
+test:
+  whisper_search_index: /var/lib/graphite/search_index
+  graphite_url: http://localhost/render/?
+  graph_width: 900
+  graph_height: 500
+
+development:
+  whisper_search_index: /var/lib/graphite/search_index
+  graphite_url: http://localhost/render/?
+  graph_width: 900
+  graph_height: 500
+
+production:
+  whisper_search_index: /var/lib/graphite/search_index
+  graphite_url: http://localhost/render/?
+  graph_width: 900
+  graph_height: 500
