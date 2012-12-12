@@ -24,8 +24,8 @@ module Fp
     def initialize(series, attributes = {})
       @series = series
       attributes.each do |name, value|
-       send("#{name}=", value)
-       end
+        send("#{name}=", value)
+      end
     end
 
     def persisted?
