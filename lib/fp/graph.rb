@@ -5,7 +5,18 @@ module Fp
 
     attr_accessor :series_id, :graph_start, :graph_end
 
+    def get_series_info
+      series = Array.new
+      @series_id.delete_if {|x| x == '' }.each do |s|
+        if @series and @series["#{s.to_s}"]
+          series << @series["#{s.to_s}"]
+        end
+      end
+      series
+    end
+
     def get_url
+      tags_config = Fp::Graphite::Tags.new
       ggraph = GraphiteGraph.new(:none)
       ggraph.width Fp::Configuration.graph_width
       ggraph.height Fp::Configuration.graph_height
@@ -18,6 +29,9 @@ module Fp
       ggraph.foreground_color Configuration.graph_foreground_color
       ggraph.fontsize Configuration.graph_fontsize
 
+      # Don't display graph legend, we will do it
+      #ggraph.hide_legend true
+
       @series_id.each do |s|
         next if s == ""
         if @series and @series["#{s.to_s}"]
@@ -26,6 +40,15 @@ module Fp
           # Pull Options for Graph Serie from SeriesName
           options.merge!(serie.graphite_options)
           ggraph.field s, options
+
+          # Fetch Options for Tags
+          serie.tags.each do |t|
+            if tag = tags_config.tag?(t)
+              tag.options.each do |o|
+                ggraph.send("#{o}", tag.get_val(o))
+              end
+            end
+          end
         end
       end
 
@@ -43,5 +66,6 @@ module Fp
     def persisted?
       false
     end
+
   end
 end

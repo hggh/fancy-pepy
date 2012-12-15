@@ -5,6 +5,7 @@ class GraphitesController < ApplicationController
     @series = graphite_series.tag?(@tagname.split(','))
     @graph = Fp::Graph.new(@series, request[:fp_graph])
     @graph_url = @graph.get_url
+    @series_information = @graph.get_series_info
   end
 
   def index
