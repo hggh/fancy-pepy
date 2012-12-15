@@ -4,11 +4,14 @@ require 'fp/series_name'
 
 module Fp
   class Series
+    attr_reader :tags
     
     def initialize
+      @tags = Array.new
       @series = Hash.new
       @display_index  = 1
-      @data_directory = File.join(File.dirname(__FILE__), '..', '..', 'data')
+      @data_directory = File.join(File.dirname(__FILE__), '..', '..', 'data', 'series')
+      get_data_files
     end
 
     def tag?(tagname)
@@ -19,6 +22,10 @@ module Fp
           end
       end
       found
+    end
+
+    def tags
+      @tags.flatten.uniq
     end
 
     def get_data_files
@@ -34,8 +41,8 @@ module Fp
       whisper_search_index = Fp::Whisper.new
       begin
         data = YAML::load( File.open(filename))
-        if data.kind_of?(Array)
-        else
+        unless data.kind_of?(Array)
+          Rails.logger.error "Config file #{filename} has got no Arrays defined."
           raise "#{filename} has no array defined, ignoring"
         end
         data.each do |s|
@@ -56,8 +63,10 @@ module Fp
                 :name          => name.join(" "),
                 :file          => filename,
                 :display_index => s['display_index'],
-                :tags          => s['tags'].split(',')
+                :tags          => s['tags'].split(','),
+                :graphite      => s['graphite']
               })
+              @tags << s['tags'].split(',')
             end        
           else
             id = Digest::SHA1.hexdigest(s['file'])
@@ -66,8 +75,10 @@ module Fp
               :name          => s['name'],
               :file          => s['file'],
               :display_index => s['display_index'],
-              :tags          => s['tags'].split(',')
+              :tags          => s['tags'].split(','),
+              :graphite      => s['graphite']
             })
+            @tags << s['tags'].split(',')
           end
           rescue Exception => e
             Rails.logger.error "Error in Fp::Series: #{e.message}"

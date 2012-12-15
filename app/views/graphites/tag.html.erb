@@ -1,0 +1,22 @@
+<h1>Tag: <%= @tagname -%></h1>
+
+<%= form_for(@graph, :url => draw_graphites_path, :remote => true) do |f| %>
+<%= hidden_field_tag "tagname", @tagname %>
+
+<div style="padding-top:20px;" style="width:100%">
+
+
+      <div style="width:801px;float:left;">
+        <div id="graphite_graph"></div>
+      </div>
+      <div style="float:left;padding-left:30px;"> 
+        <%= f.select :series_id, @series.map { |k,h| [h.name, h.id] }, { } , { :multiple => true, :size => 30 } %>
+        <p>Start: <%= f.text_field :graph_start, { :class => 'input-medium' } -%></p>
+        <p>End: <%= f.text_field :graph_end, { :class => 'input-medium' } -%></p>
+        <p><%= f.submit "Graph!", :class => "btn btn-primary" %></p>
+      </div>
+   
+
+</div>
+<% end %>
+<br/ clear="both">

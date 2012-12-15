@@ -1,7 +1,11 @@
 FancyPepy::Application.routes.draw do
-  post "graph/draw"
 
-  match 'tag/:tagname' => 'home#tag'
+  resources :graphites do
+    collection do
+      post 'draw'
+    end
+  end
+  match 'graphites/tag/:tagname' => 'graphites#tag'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

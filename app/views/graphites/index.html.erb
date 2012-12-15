@@ -1,0 +1,9 @@
+<h1>Graphite System</h1>
+
+<h2>Available tags</h2>
+
+<ul>
+  <% @tags.each do |t| %>
+  <li><%= link_to t, tag_graphites_path(t)  %></li>
+  <% end %>
+</ul>
