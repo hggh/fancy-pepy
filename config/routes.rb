@@ -5,7 +5,7 @@ FancyPepy::Application.routes.draw do
       post 'draw'
     end
   end
-  match 'graphites/tag/:tagname' => 'graphites#tag'
+  get 'graphites/tag/:tagname' => 'graphites#tag'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
